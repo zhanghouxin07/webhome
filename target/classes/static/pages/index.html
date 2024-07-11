@@ -45,6 +45,10 @@
             border-radius: 5px;
             margin-top: 20px;
         }
+
+        #imageContainer {
+            margin-top: 20px;
+        }
     </style>
 </head>
 
@@ -52,7 +56,9 @@
 <h1>Hello, 胖胖!</h1>
 <p>This is a simple page.</p>
 <button onclick="fetchData()">Fetch Data</button>
+<button onclick="fetchImage('zhonglou')">Fetch Image</button>
 <div id="dataContainer"></div>
+<div id="imageContainer"></div>
 
 <script>
     function fetchData() {
@@ -63,6 +69,25 @@
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
+            });
+    }
+
+    function fetchImage(imageName) {
+        fetch('/image/' + imageName)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const imageUrl = URL.createObjectURL(blob);
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                document.getElementById('imageContainer').appendChild(img);
+            })
+            .catch(error => {
+                console.error('Error fetching image:', error);
             });
     }
 </script>
